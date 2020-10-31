@@ -1,0 +1,31 @@
+{
+  "name": "muteferrika",
+  "version": "1.0.0",
+  "description": "a simple and lightweight shortcode rendering engine",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest --verbose -i test.js -t",
+    "lint": "npm run lint:standard",
+    "lint:standard": "standard --verbose | snazzy || exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hsynlms/muteferrika.git"
+  },
+  "keywords": [
+    "shortcode",
+    "shortcode-engine",
+    "rendering-engine"
+  ],
+  "author": "Huseyin ELMAS",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hsynlms/muteferrika/issues"
+  },
+  "homepage": "https://github.com/hsynlms/muteferrika#readme",
+  "devDependencies": {
+    "jest": "^26.6.1",
+    "snazzy": "^9.0.0",
+    "standard": "^16.0.1"
+  }
+}
