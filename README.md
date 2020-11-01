@@ -7,21 +7,33 @@
 
 Wheel is not reinvented, instead [Wordpress](https://wordpress.org) shortcode and shortcode attribute parser regular expressions are used in the engine.
 
-## Methods
+## Features
 
-| Name        | Parameters           | Description                                                                               |
-| ---         | ---                  | ---                                                                                       |
-| add         | `name`, `calback`     | Adds given shortcode to the shortcode list to be used in rendering process. `name` is the unique shortcode identifier name in string type and can contain hyphens and dashes. Whenever the shortcode identifier name found in the given context, they all will be rendered through the `callback` function. And the callback function should return the rendered shortcode output. |
-| remove      | `name`               | Removes given shortcode from the shortcode list. `name` is the unique shortcode identifier name in string type. Removed shortcodes will not be rendered in the given context. |
-| clear       | -                    | Clears shortcode list. |
-| override    | `name`, `calback`    | Overrides callback function of the given shortcode. `name` is the shortcode identifier name in string type. |
-| shortcodes  | -                    | Returns defined shortcodes. |
-| render      | `content`            | Renders defined shortcodes in the given content. `content` must be in string type and can contain hyphens and dashes. |
+- Supports creating multiple instances
+- Supports self-closing, enclosing and nested shortcodes
+- Supports shortcode attribute parsing with automatic type casting (primitive types)
+- Supports bulk shortcode insert
+- Supports overriding a shortcode callback function at runtime
+- [Standard JS](https://github.com/standard/standard) compatible source code
+- Comprehensive unit tests
+
+## Installation
+`npm install muteferrika`
+
+## Usage
+
+```js
+// ES5 syntax
+const ibrahim = require('muteferrika')
+
+// ES6 syntax
+import ibrahim from 'muteferrika'
+```
 
 ## Examples
 
 ```js
-// get required modules
+// get required modules ES5
 const ibrahim = require('muteferrika')
 
 // define a shortcode
@@ -64,8 +76,43 @@ so, you said nested?
 */
 ```
 
-## Installation
-`npm install muteferrika`
+## API
+
+### `Muteferrika.add(name, callback)`
+
+Adds given shortcode to the shortcode list to be used in rendering process.
+
+`name` is the unique shortcode identifier name in string type and can contain hyphen(s) and dash(es).
+`callback` is the handler function that renders shortcode and returns the output. The handler function receives (attrs, data). `data` will be passed to the handler function if the shortcode is enclosed.
+
+### `Muteferrika.addRange(shortcodes)`
+
+Adds given shortcodes to the shortcode list to be used in rendering process. Each shortcode item should contain `name` and `callback` fields.
+
+### `Muteferrika.remove(name)`
+
+Removes the given shortcode from the shortcode list.
+
+`name` is the unique shortcode identifier name in string type. Removed shortcodes will not be rendered in the given context.
+
+### `Muteferrika.clear()`
+
+Clears/removes all shortcodes from the list.
+
+### `Muteferrika.override(name, callback)`
+
+Overrides callback function of the given shortcode.
+
+`name` is the unique shortcode identifier name in string type and can contain hyphen(s) and dash(es).
+`callback` is new handler function that renders shortcode and returns the output.
+
+### `Muteferrika.shortcodes()`
+
+Returns defined shortcode list.
+
+### `Muteferrika.render(content)`
+
+Renders defined shortcodes in the given content through callback functions. `content` must be in string type.
 
 ## Contribution
 Contributions and pull requests are kindly welcomed!
