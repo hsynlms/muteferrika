@@ -196,7 +196,7 @@ class Muteferrika {
           .filter(attr => typeof attr[1] !== 'undefined' && typeof attr[2] !== 'undefined')
           .reduce(
             (acc, attr) => {
-              acc[attr[1].trim()] = attr[2].trim()
+              acc[attr[1].trim()] = helpers.typeCast(attr[2].trim())
               return acc
             },
             {}
