@@ -58,11 +58,14 @@ class Muteferrika {
     shortcodes.forEach(shortcode => {
       // validate shortcode fields
       if (!('name' in shortcode) ||
-          !('callback' in shortcode) ||
           typeof shortcode.name !== 'string' ||
-          typeof shortcode.callback !== 'function' ||
           !shortcode.name.trim()) {
-        return
+        throw new TypeError('"name" may not be provided, may not in string type or may be empty')
+      }
+
+      if (!('callback' in shortcode) ||
+          typeof shortcode.callback !== 'function') {
+        throw new TypeError('"callback" may not be provided or may not be a function')
       }
 
       // remove space from start and end of the shortcode name
