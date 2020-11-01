@@ -83,7 +83,7 @@ test('override an existing shortcode callback function', () => {
   ibrahim.add('shortcode_second', noop)
 
   const response =
-  ibrahim.override('shortcode_second', customCb)
+    ibrahim.override('shortcode_second', customCb)
 
   // eslint-disable-next-line
   expect(response).toBe(true)
@@ -99,7 +99,7 @@ test('override non-existing shortcode callback function', () => {
   ibrahim.add('shortcode_second', noop)
 
   const response =
-  ibrahim.override('shortcode_third', customCb)
+    ibrahim.override('shortcode_third', customCb)
 
   // eslint-disable-next-line
   expect(response).toBe(false)
