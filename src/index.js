@@ -39,7 +39,7 @@ class Muteferrika {
     // add shortcode to the list
     this.#_shortcodes =
       this.#_shortcodes.concat({
-        name,
+        name: _name,
         callback
       })
   }
