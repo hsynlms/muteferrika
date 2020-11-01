@@ -45,6 +45,48 @@ class Muteferrika {
   }
 
   /**
+   * Adds given shortcodes to the shortcode list to be used in rendering process
+   * @param shortcodes List of the shortcodes
+   */
+  addRange (shortcodes) {
+    // validation
+    if (!Array.isArray(shortcodes)) {
+      throw new TypeError(`"shortcodes" is expected to be an array but got: ${typeof name}`)
+    }
+
+    // loop shortcodes
+    shortcodes.forEach(shortcode => {
+      // validate shortcode fields
+      if (!('name' in shortcode) ||
+          !('callback' in shortcode) ||
+          typeof shortcode.name !== 'string' ||
+          typeof shortcode.callback !== 'function' ||
+          !shortcode.name.trim()) {
+        return
+      }
+
+      // remove space from start and end of the shortcode name
+      const _name = shortcode.name.trim()
+
+      // check the existence of the given shortcode
+      if (
+        this.#_shortcodes
+          .filter(x => x.name === _name)
+          .length
+      ) {
+        throw new Error(`A same name shortcode does already exist: ${_name}`)
+      }
+
+      // add shortcode to the list
+      this.#_shortcodes =
+        this.#_shortcodes.concat({
+          name: _name,
+          callback: shortcode.callback
+        })
+    })
+  }
+
+  /**
    * Removes given shortcode from the shortcode list
    * @param name Name of the shortcode
    */
