@@ -94,7 +94,7 @@ Adds given shortcodes to the shortcode list to be used in rendering process. Eac
 
 Removes the given shortcode from the shortcode list.
 
-`name` is the unique shortcode identifier name in string type. Removed shortcodes will not be rendered in the given context.
+`name` is the unique shortcode identifier name in string type.
 
 ### `Muteferrika.clear()`
 
