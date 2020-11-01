@@ -3,7 +3,7 @@
 
 [![NPM](https://nodei.co/npm/muteferrika.png)](https://nodei.co/npm/muteferrika/)
 
-`Muteferrika` is a rendering engine which gives you full control of how your shortcodes are getting rendered. Create your shortcodes, let Muteferrika know them, and get rendered output. It's that much simple. It also supports nested shortcodes, yeey!
+`Muteferrika` is a rendering engine which has no dependency and gives you full control of how your shortcodes are getting rendered. Create your shortcodes, let Muteferrika know them, and get the rendered output. It's that much simple. It also supports nested shortcodes, yeey!
 
 Wheel is not reinvented, instead [Wordpress](https://wordpress.org) shortcode and shortcode attribute parser regular expressions are used in the engine.
 
@@ -11,12 +11,12 @@ Wheel is not reinvented, instead [Wordpress](https://wordpress.org) shortcode an
 
 | Name        | Parameters           | Description                                                                               |
 | ---         | ---                  | ---                                                                                       |
-| add         | `name`, `calback`     | Adds given shortcode to the shortcode list to be used in rendering process. `name` is the unique shortcode identifier name in string type. Whenever the shortcode identifier name found in the given context, they all will be rendered through the `callback` function. And the callback function should return the rendered shortcode output. |
+| add         | `name`, `calback`     | Adds given shortcode to the shortcode list to be used in rendering process. `name` is the unique shortcode identifier name in string type and can contain hyphens and dashes. Whenever the shortcode identifier name found in the given context, they all will be rendered through the `callback` function. And the callback function should return the rendered shortcode output. |
 | remove      | `name`               | Removes given shortcode from the shortcode list. `name` is the unique shortcode identifier name in string type. Removed shortcodes will not be rendered in the given context. |
 | clear       | -                    | Clears shortcode list. |
 | override    | `name`, `calback`    | Overrides callback function of the given shortcode. `name` is the shortcode identifier name in string type. |
 | shortcodes  | -                    | Returns defined shortcodes. |
-| render      | `content`            | Renders defined shortcodes in the given content. `content` must be in string type. |
+| render      | `content`            | Renders defined shortcodes in the given content. `content` must be in string type and can contain hyphens and dashes. |
 
 ## Examples
 
