@@ -116,7 +116,7 @@ Returns defined shortcode list.
 {
   name: string,
   callback: function
-} : Array
+}: Array
 ```
 
 ### `Muteferrika.render(content)`
