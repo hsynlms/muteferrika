@@ -261,6 +261,39 @@ test('shortcode list mutation', () => {
   expect(list1.map(x => x.name)).not.toEqual(list2.map(x => x.name))
 })
 
+// eslint-disable-next-line
+test('bulk shortcode add', () => {
+  const ibrahim = new Muteferrika()
+
+  ibrahim.addRange([
+    {
+      name: 'parent',
+      callback: (attrs, data) => data
+    },
+    {
+      name: 'child',
+      callback: customCb
+    }
+  ])
+
+  const response = ibrahim.render('[parent][child][/parent]')
+
+  // eslint-disable-next-line
+  expect(response).toBe('test')
+})
+
+// eslint-disable-next-line
+test('shortcode name starts and ends with space', () => {
+  const ibrahim = new Muteferrika()
+
+  ibrahim.add(' spaced-name ', customCb)
+
+  const response = ibrahim.render('[spaced-name]')
+
+  // eslint-disable-next-line
+  expect(response).toBe('test')
+})
+
 // validation tests
 
 // eslint-disable-next-line
