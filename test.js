@@ -277,7 +277,10 @@ test('bulk shortcode add', () => {
   ])
 
   const response = ibrahim.render('[parent][child][/parent]')
+  const list = ibrahim.shortcodes()
 
+  // eslint-disable-next-line
+  expect(list.map(x => x.name)).toEqual(['parent', 'child'])
   // eslint-disable-next-line
   expect(response).toBe('test')
 })
@@ -487,5 +490,40 @@ test('render() method - "text" validation', () => {
   // eslint-disable-next-line
   expect(() => {
     ibrahim.render(false)
+  }).toThrow()
+})
+
+// eslint-disable-next-line
+test('addRange() method - "shortcodes" validation', () => {
+  const ibrahim = new Muteferrika()
+
+  // eslint-disable-next-line
+  expect(() => {
+    ibrahim.addRange({})
+  }).toThrow()
+
+  // eslint-disable-next-line
+  expect(() => {
+    ibrahim.addRange('')
+  }).toThrow()
+
+  // eslint-disable-next-line
+  expect(() => {
+    ibrahim.addRange(1)
+  }).toThrow()
+
+  // eslint-disable-next-line
+  expect(() => {
+    ibrahim.addRange(false)
+  }).toThrow()
+
+  // eslint-disable-next-line
+  expect(() => {
+    ibrahim.addRange([{ rame: 'test', callback: noop }])
+  }).toThrow()
+
+  // eslint-disable-next-line
+  expect(() => {
+    ibrahim.addRange([{ name: 'test', callmeback: noop }])
   }).toThrow()
 })
