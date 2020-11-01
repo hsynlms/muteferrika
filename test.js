@@ -297,6 +297,26 @@ test('shortcode name starts and ends with space', () => {
   expect(response).toBe('test')
 })
 
+// eslint-disable-next-line
+test('shortcode attribute casted type validations', done => {
+  const ibrahim = new Muteferrika()
+
+  ibrahim.add('test', (attrs, data) => {
+    // eslint-disable-next-line
+    expect(typeof attrs.int).toBe('number')
+    // eslint-disable-next-line
+    expect(typeof attrs.bool).toBe('boolean')
+    // eslint-disable-next-line
+    expect(typeof attrs.float).toBe('number')
+    // eslint-disable-next-line
+    expect(typeof attrs.str).toBe('string')
+
+    done()
+  })
+
+  ibrahim.render('[test int="1" bool="true" float="47.21" str="selda bagcan"]')
+})
+
 // validation tests
 
 // eslint-disable-next-line
