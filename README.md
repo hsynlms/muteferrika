@@ -83,6 +83,7 @@ so, you said nested?
 Adds given shortcode to the shortcode list to be used in rendering process.
 
 `name` is the unique shortcode identifier name in string type and can contain hyphen(s) and dash(es).
+
 `callback` is the handler function that renders shortcode and returns the output. The handler function receives (attrs, data). `data` will be passed to the handler function if the shortcode is enclosed.
 
 ### `Muteferrika.addRange(shortcodes)`
@@ -104,6 +105,7 @@ Clears/removes all shortcodes from the list.
 Overrides callback function of the given shortcode.
 
 `name` is the unique shortcode identifier name in string type and can contain hyphen(s) and dash(es).
+
 `callback` is new handler function that renders shortcode and returns the output.
 
 ### `Muteferrika.shortcodes()`
