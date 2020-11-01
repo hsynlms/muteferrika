@@ -112,6 +112,13 @@ Overrides callback function of the given shortcode.
 
 Returns defined shortcode list.
 
+```js
+{
+  name: string,
+  callback: function
+} : Array
+```
+
 ### `Muteferrika.render(content)`
 
 Renders defined shortcodes in the given content through callback functions. `content` must be in string type.
