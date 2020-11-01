@@ -33,7 +33,6 @@ import ibrahim from 'muteferrika'
 ## Examples
 
 ```js
-// get required modules ES5
 const ibrahim = require('muteferrika')
 
 // define a shortcode
@@ -55,7 +54,6 @@ lorem ipsum <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Ibrahi
 Nested shortcode example:
 
 ```js
-// get required modules
 const ibrahim = require('muteferrika')
 
 ibrahim.add('parent', (attrs, data) => {
