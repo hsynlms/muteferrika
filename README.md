@@ -14,7 +14,7 @@ Wheel is not reinvented, instead [Wordpress](https://wordpress.org) shortcode an
 - Supports shortcode attribute parsing with automatic type casting (primitive types)
 - Supports bulk shortcode insert
 - Supports overriding a shortcode callback function at runtime
-- [Standard JS](https://github.com/standard/standard) compatible source code
+- [Standard](https://github.com/standard/standard) style source code
 - Comprehensive unit tests
 
 ## Installation
@@ -88,6 +88,14 @@ Adds given shortcode to the shortcode list to be used in rendering process.
 
 Adds given shortcodes to the shortcode list to be used in rendering process. Each shortcode item should contain `name` and `callback` fields.
 
+```js
+{
+  name: string,
+  callback: function
+}
+: Array
+```
+
 ### `Muteferrika.remove(name)`
 
 Removes the given shortcode from the shortcode list.
@@ -114,7 +122,8 @@ Returns defined shortcode list.
 {
   name: string,
   callback: function
-}: Array
+}
+: Array
 ```
 
 ### `Muteferrika.render(content)`
