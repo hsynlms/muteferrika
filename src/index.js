@@ -12,8 +12,8 @@ function Muteferrika () {
 
 /**
  * Adds given shortcode to the shortcode list to be used in rendering process
- * @param name Name of the shortcode
- * @param callback Shortcode renderer callback function. This function will be invoked with an array that holds all the shortcode tag attributes as the only argument
+ * @param {string} name Name of the shortcode
+ * @param {function} callback Shortcode renderer callback function
  */
 Muteferrika.prototype.add = function (name, callback) {
   // validation
@@ -49,7 +49,7 @@ Muteferrika.prototype.add = function (name, callback) {
 
 /**
  * Adds given shortcodes to the shortcode list to be used in rendering process
- * @param shortcodes List of the shortcodes
+ * @param {array} shortcodes List of the shortcodes
  */
 Muteferrika.prototype.addRange = function (shortcodes) {
   // validation
@@ -94,7 +94,7 @@ Muteferrika.prototype.addRange = function (shortcodes) {
 
 /**
  * Removes given shortcode from the shortcode list
- * @param name Name of the shortcode
+ * @param {string} name Name of the shortcode
  */
 Muteferrika.prototype.remove = function (name) {
   // validation
@@ -123,7 +123,9 @@ Muteferrika.prototype.clear = function () {
 
 /**
  * Overrides callback function of the given shortcode
- * @returns {Boolean} Indicates success of the overriding process
+ * @param {string} name Name of the shortcode
+ * @param {function} callback New shortcode renderer callback function
+ * @returns {boolean} Indicates success of the overriding process
  */
 Muteferrika.prototype.override = function (name, callback) {
   // validation
@@ -154,7 +156,7 @@ Muteferrika.prototype.override = function (name, callback) {
 
 /**
  * Returns defined shortcodes
- * @returns {Array} List of shortcodes
+ * @returns {array} List of shortcodes
  */
 Muteferrika.prototype.shortcodes = function () {
   let mutatedList = []

@@ -3,8 +3,8 @@
 const helpers = {
   /**
    * Casts the primitive value to the automatically detected type
-   * @param value The primitive value that will be casted
-   * @returns Auto casted value
+   * @param {string} value The primitive value that will be casted
+   * @returns {(string|boolean|number)} Auto casted value
    */
   typeCast: value => {
     // return not supported type values
@@ -32,8 +32,8 @@ const helpers = {
   },
   /**
    * Returns string literal level escaped RegExp string
-   * @param {String} shortCodesArr Name of all the shortcode tags intended to be parsed
-   * @returns {String} Escaped string literal level RegExp string
+   * @param {string} string String literal level RegExp string
+   * @returns {string} Escaped string literal level RegExp string
    */
   escapeRegExp: string => {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
@@ -41,8 +41,8 @@ const helpers = {
   },
   /**
    * Returns shortcode tag parser regexp object
-   * @param {Array} shortCodesArr Name of all the shortcode tags intended to be parsed
-   * @param {String} flags RegExp flags
+   * @param {array} shortCodesArr Name of all the shortcode tags intended to be parsed
+   * @param {string} flags RegExp flags
    * @returns {RegExp} A Regexp object instance
    */
   getShortCodeTagRegex: (shortCodesArr, flags = '') => {
@@ -57,7 +57,7 @@ const helpers = {
   },
   /**
    * Returns shortcode tag attribute parser regexp object
-   * @param {String} flags RegExp flags
+   * @param {string} flags RegExp flags
    * @returns {RegExp} A Regexp object
    */
   getShortCodeAttrRegexp: (flags = '') => {
