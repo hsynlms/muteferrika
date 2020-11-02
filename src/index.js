@@ -252,7 +252,7 @@ Muteferrika.prototype.render = function (content) {
 
     // invoke the shortcode callback and get the result
     const scOutput =
-      shortcode.callback.call(null, attributes, data)
+      shortcode.callback(attributes, data)
 
     // validations
     if (scOutput && typeof scOutput === 'string') {
