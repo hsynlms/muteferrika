@@ -3,7 +3,7 @@
 
 [![NPM](https://nodei.co/npm/muteferrika.png)](https://nodei.co/npm/muteferrika/)
 
-`Muteferrika` is a rendering engine which has no dependency and gives you full control of how your shortcodes are getting rendered. Create your shortcodes, let Muteferrika know them, and get the rendered output. It's that much simple. It also supports nested shortcodes, yeey!
+`Muteferrika` is a rendering engine with no dependency that gives you full control of how your shortcodes are getting rendered. Create your shortcodes, let Muteferrika know them, and get the rendered output. It's that much simple. It also supports nested shortcodes, yeey!
 
 Wheel is not reinvented, instead [Wordpress](https://wordpress.org) shortcode and shortcode attribute parser regular expressions are used in the engine.
 
@@ -17,6 +17,7 @@ Wheel is not reinvented, instead [Wordpress](https://wordpress.org) shortcode an
 - Supports sync and async rendering
 - [Standard](https://github.com/standard/standard) style source code
 - Comprehensive unit tests
+- No dependency!
 
 ## Installation
 `npm install muteferrika`
