@@ -382,7 +382,7 @@ describe(
     })
 
     // eslint-disable-next-line
-    test('shortcode attribute casted type validations', done => {
+    test('shortcode attribute casted type validations', async done => {
       const ibrahim = new Muteferrika()
 
       ibrahim.add('test', (attrs, data) => {
@@ -398,7 +398,7 @@ describe(
         done()
       })
 
-      ibrahim.render('[test int="1" bool="true" float="47.21" str="selda bagcan"]')
+      await ibrahim.render('[test int="1" bool="true" float="47.21" str="selda bagcan"]')
     })
   }
 )
