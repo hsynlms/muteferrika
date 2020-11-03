@@ -7,7 +7,95 @@ const helpers = require('./helpers')
  * Muteferrika class
  */
 function Muteferrika () {
+  // private field(s)
   this._shortcodes = []
+
+  // private method(s)
+  this._fetchTags = function (content) {
+    // parse shortcode tags
+    const tagNames = this._shortcodes.map(x => x.name)
+    const tagRegexp = helpers.getShortCodeTagRegex(tagNames, 'gmi')
+    const tagMatches = [...RegExp.prototype[Symbol.matchAll].call(tagRegexp, content)]
+
+    return {
+      tagNames,
+      tagRegexp,
+      tagMatches
+    }
+  }
+
+  this._tagParser = function (tag, tagRegexp, output) {
+    // render the shortcode if its not espaced by double brackets
+    const isEscaped = tag[1].trim() === '[' && tag[6].trim() === ']'
+    if (isEscaped) {
+      // make the shortcode not getting rendered
+      return output.replace(
+        new RegExp(
+          helpers.escapeRegExp(tag[0].trim()),
+          'gmi'
+        ),
+        tag[0].trim()
+          .replace(/\[+/g, '&#91;')
+          .replace(/\]+/g, '&#93;')
+      )
+    }
+
+    // get the shortcode
+    const shortcode =
+      this._shortcodes.filter(shortcode => shortcode.name === tag[2].trim())[0]
+
+    const fullMatch = tag[0].trim()
+    const rawAttributes = tag[3]
+    const rawData =
+      typeof tag[5] !== 'undefined'
+        ? tag[5].trim()
+        : ''
+
+    return {
+      shortcode,
+      fullMatch,
+      rawAttributes,
+      rawData
+    }
+  }
+
+  this._fetchTagAttributes = function (rawAttributes) {
+    // get shortcode tag parser regexp
+    const tagAttrRegexp = helpers.getShortCodeAttrRegexp('gmi')
+
+    // reveal the tag attributes
+    const tagAttrMatches =
+      [...RegExp.prototype[Symbol.matchAll].call(tagAttrRegexp, rawAttributes)]
+
+    const attributes =
+      tagAttrMatches
+        .filter(attr => typeof attr[1] !== 'undefined' && typeof attr[2] !== 'undefined')
+        .reduce(
+          (acc, attr) => {
+            acc[attr[1].trim()] = helpers.typeCast(attr[2].trim())
+            return acc
+          },
+          {}
+        )
+
+    return { attributes }
+  }
+
+  this._prepFinalOutput = function (fullMatch, shortcodeOutput, finalOutput) {
+    // validations
+    if (shortcodeOutput && typeof shortcodeOutput === 'string') {
+      // replace the shortcode full match with the output from the original text
+      return finalOutput.replace(
+        new RegExp(
+          helpers.escapeRegExp(fullMatch),
+          'gmi'
+        ),
+        shortcodeOutput
+      )
+    }
+
+    return finalOutput
+  }
 }
 
 /**
@@ -175,10 +263,11 @@ Muteferrika.prototype.shortcodes = function () {
 
 /**
  * Returns rendered output content
- * @param content The source content needs to be rendered which contains shortcodes
- * @returns {String} Rendered output text
+ * @async
+ * @param {string} content The source content needs to be rendered which contains shortcodes
+ * @returns {Promise<string>} Rendered output string
  */
-Muteferrika.prototype.render = function (content) {
+Muteferrika.prototype.render = async function (content) {
   // validation
   if (typeof content !== 'string') {
     throw new TypeError(`"context" is expected to be a string but got: ${typeof content}`)
@@ -187,88 +276,133 @@ Muteferrika.prototype.render = function (content) {
 
   let output = content
 
-  // parse shortcode tags
-  const tagNames = this._shortcodes.map(x => x.name)
-  const tagRegexp = helpers.getShortCodeTagRegex(tagNames, 'gmi')
-  const tagMatches = [...RegExp.prototype[Symbol.matchAll].call(tagRegexp, output)]
-
-  // get shortcode tag parser regexp
-  const tagAttrRegexp = helpers.getShortCodeAttrRegexp('gmi')
+  // fetch matched tags
+  const {
+    tagMatches,
+    tagRegexp
+  } = this._fetchTags(output)
 
   // invoke all found shortcode callback functions
   // and render them
-  tagMatches.forEach(x => {
-    // render the shortcode if its not espaced by double brackets
-    const isEscaped = x[1].trim() === '[' && x[6].trim() === ']'
-    if (isEscaped) {
-      // make the shortcode not getting rendered
-      output =
-        output.replace(
-          new RegExp(
-            helpers.escapeRegExp(x[0].trim()),
-            'gmi'
-          ),
-          x[0].trim()
-            .replace(/\[+/g, '&#91;')
-            .replace(/\]+/g, '&#93;')
-        )
+  for (let i = 0; i < tagMatches.length; i++) {
+    // parse the tag
+    const parsedTag =
+      this._tagParser(tagMatches[i], tagRegexp, output)
 
-      return
+    if (typeof parsedTag === 'string') {
+      output = parsedTag
+      continue
     }
 
-    // get the shortcode
-    const shortcode =
-      this._shortcodes.filter(shortcode => shortcode.name === x[2].trim())[0]
+    const {
+      shortcode,
+      fullMatch,
+      rawAttributes,
+      rawData
+    } = parsedTag
 
-    const fullMatch = x[0].trim()
-    const rawAttributes = x[3]
-    let data =
-      typeof x[5] !== 'undefined'
-        ? x[5].trim()
-        : ''
+    let data = rawData
 
     // validation
     if (data) {
       // render nested tags
-      const nestedTagMatches = [...RegExp.prototype[Symbol.matchAll].call(tagRegexp, data)]
+      const nestedTagMatches =
+        [...RegExp.prototype[Symbol.matchAll].call(tagRegexp, data)]
 
       if (nestedTagMatches.length) {
-        data = this.render(data)
+        data = await this.render(data)
       }
     }
 
-    // reveal the tag attributes
-    const tagAttrMatches =
-      [...RegExp.prototype[Symbol.matchAll].call(tagAttrRegexp, rawAttributes)]
+    // fetch the tag attributes
+    const { attributes } =
+      this._fetchTagAttributes(rawAttributes)
 
-    const attributes =
-      tagAttrMatches
-        .filter(attr => typeof attr[1] !== 'undefined' && typeof attr[2] !== 'undefined')
-        .reduce(
-          (acc, attr) => {
-            acc[attr[1].trim()] = helpers.typeCast(attr[2].trim())
-            return acc
-          },
-          {}
-        )
+    // invoke the shortcode callback and get the result
+    const scOutput =
+      await shortcode.callback(attributes, data)
+
+    // process final output
+    output =
+      this._prepFinalOutput(
+        fullMatch,
+        scOutput,
+        output
+      )
+  }
+
+  // return the output
+  return output
+}
+
+/**
+ * Returns rendered output content
+ * @param {string} content The source content needs to be rendered which contains shortcodes
+ * @returns {string} Rendered output string
+ */
+Muteferrika.prototype.renderSync = function (content) {
+  // validation
+  if (typeof content !== 'string') {
+    throw new TypeError(`"context" is expected to be a string but got: ${typeof content}`)
+  }
+  if (!content.trim()) return content
+
+  let output = content
+
+  // fetch matched tags
+  const {
+    tagMatches,
+    tagRegexp
+  } = this._fetchTags(output)
+
+  // invoke all found shortcode callback functions
+  // and render them
+  for (let i = 0; i < tagMatches.length; i++) {
+    // parse the tag
+    const parsedTag =
+      this._tagParser(tagMatches[i], tagRegexp, output)
+
+    if (typeof parsedTag === 'string') {
+      output = parsedTag
+      continue
+    }
+
+    const {
+      shortcode,
+      fullMatch,
+      rawAttributes,
+      rawData
+    } = parsedTag
+
+    let data = rawData
+
+    // validation
+    if (data) {
+      // render nested tags
+      const nestedTagMatches =
+        [...RegExp.prototype[Symbol.matchAll].call(tagRegexp, data)]
+
+      if (nestedTagMatches.length) {
+        data = this.renderSync(data)
+      }
+    }
+
+    // fetch the tag attributes
+    const { attributes } =
+      this._fetchTagAttributes(rawAttributes)
 
     // invoke the shortcode callback and get the result
     const scOutput =
       shortcode.callback(attributes, data)
 
-    // validations
-    if (scOutput && typeof scOutput === 'string') {
-      // replace the shortcode full match with the output from the original text
-      output =
-        output.replace(
-          new RegExp(
-            helpers.escapeRegExp(fullMatch),
-            'gmi'
-          ),
-          scOutput
-        )
-    }
-  })
+    // process final output
+    output =
+      this._prepFinalOutput(
+        fullMatch,
+        scOutput,
+        output
+      )
+  }
 
   // return the output
   return output
