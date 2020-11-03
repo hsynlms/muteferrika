@@ -14,6 +14,7 @@ Wheel is not reinvented, instead [Wordpress](https://wordpress.org) shortcode an
 - Supports shortcode attribute parsing with automatic type casting (primitive types)
 - Supports bulk shortcode insert
 - Supports overriding a shortcode callback function at runtime
+- Supports sync and async rendering
 - [Standard](https://github.com/standard/standard) style source code
 - Comprehensive unit tests
 
@@ -36,12 +37,12 @@ import ibrahim from 'muteferrika'
 const ibrahim = require('muteferrika')
 
 // define a shortcode
-ibrahim.add('entry_image', (attrs, data) => {
+ibrahim.add('entry_image', async (attrs, data) => {
   return `<img src="${attrs.src}" alt="${data}"/>`
 })
 
 const response =
-  ibrahim.render('lorem ipsum [entry_image src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Ibrahim_M%C3%BCteferrika.jpg"]Ibrahim Muteferrika[/entry_image] dolor sit amet.')
+  await ibrahim.render('lorem ipsum [entry_image src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Ibrahim_M%C3%BCteferrika.jpg"]Ibrahim Muteferrika[/entry_image] dolor sit amet.')
 
 console.log(response)
 
@@ -64,7 +65,7 @@ ibrahim.add('child', (attrs, data) => {
   return 'you said nested?'
 })
 
-const response = ibrahim.render('[parent]so, [child][/parent]')
+const response = ibrahim.renderSync('[parent]so, [child][/parent]')
 
 console.log(response)
 
@@ -80,13 +81,13 @@ so, you said nested?
 
 Adds given shortcode to the shortcode list to be used in rendering process.
 
-`name` is the unique shortcode identifier name in string type and can contain hyphen(s) and dash(es).
+`name` is the unique shortcode name and can contain hyphen(s) and dash(es).
 
-`callback` is the handler function that renders shortcode and returns the output. The handler function receives (attrs, data). `data` will be passed to the handler function if the shortcode is enclosed.
+`callback` is the shortcode handler function that renders shortcode and returns the output. The handler function receives (attrs, data). `attrs` is an object that holds all the shortcode attributes, `data` is a string that holds all the content in enclosed/nested shortcodes.
 
 ### `Muteferrika.addRange(shortcodes)`
 
-Adds given shortcodes to the shortcode list to be used in rendering process. Each shortcode item should contain `name` and `callback` fields.
+Adds given shortcodes to the shortcode list. Each array item must contain `name` and `callback` properties.
 
 ```js
 {
@@ -100,7 +101,7 @@ Adds given shortcodes to the shortcode list to be used in rendering process. Eac
 
 Removes the given shortcode from the shortcode list.
 
-`name` is the unique shortcode identifier name in string type.
+`name` is the unique shortcode name and can contain hyphen(s) and dash(es).
 
 ### `Muteferrika.clear()`
 
@@ -108,15 +109,15 @@ Clears/removes all shortcodes from the list.
 
 ### `Muteferrika.override(name, callback)`
 
-Overrides callback function of the given shortcode.
+Overrides the shortcode handler function of the given shortcode.
 
-`name` is the unique shortcode identifier name in string type and can contain hyphen(s) and dash(es).
+`name` is the unique shortcode name and can contain hyphen(s) and dash(es).
 
-`callback` is new handler function that renders shortcode and returns the output.
+`callback` is the new shortcode handler function.
 
 ### `Muteferrika.shortcodes()`
 
-Returns defined shortcode list.
+Returns defined shortcodes list.
 
 ```js
 {
@@ -128,7 +129,15 @@ Returns defined shortcode list.
 
 ### `Muteferrika.render(content)`
 
-Renders defined shortcodes in the given content through callback functions. `content` must be in string type.
+Asynchronously renders the shortcodes in the given content through shortcode (sync and async) handler functions.
+
+`content` must be a string.
+
+### `Muteferrika.renderSync(content)`
+
+Synchronously renders the shortcodes in the given content through shortcode (sync and async) handler functions.
+
+`content` must be a string.
 
 ## Contribution
 Contributions and pull requests are kindly welcomed!
