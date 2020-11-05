@@ -25,7 +25,7 @@ Wheel is not reinvented, instead [Wordpress](https://wordpress.org) shortcode an
 ## Usage
 
 ```js
-// ES5 syntax
+// CommonJS syntax
 const ibrahim = require('muteferrika')
 
 // ES6 syntax
