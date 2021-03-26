@@ -146,7 +146,7 @@ Sets the handler for the given event.
 
 `name` is the name of the event. See [events section](#events) for more information.
 
-`callback` the event handler function which will be called when the event is fired. See [events section](#events) for more information.
+`handler` the event handler function which will be called when the event is fired. See [events section](#events) for more information.
 
 ## Events
 
