@@ -47,7 +47,7 @@ function _tagParser (tag, output) {
 
   // get the shortcode
   const shortcode =
-    this._shortcodes.filter(shortcode => shortcode.name === tag[2].trim())[0]
+    this._shortcodes.filter(shortcode => shortcode.name === tag[2].trim())[0] || {}
 
   const fullMatch = tag[0].trim()
   const rawAttributes = tag[3]
@@ -333,7 +333,9 @@ Muteferrika.prototype.render =
 
       // invoke the shortcode callback and get the result
       const scOutput =
-        await shortcode.callback(attributes, data)
+        typeof shortcode.callback === 'function'
+          ? await shortcode.callback(attributes, data)
+          : data
 
       // process final output
       output =
@@ -408,7 +410,9 @@ Muteferrika.prototype.renderSync =
 
       // invoke the shortcode callback and get the result
       const scOutput =
-        shortcode.callback(attributes, data)
+        typeof shortcode.callback === 'function'
+          ? shortcode.callback(attributes, data)
+          : data
 
       // process final output
       output =

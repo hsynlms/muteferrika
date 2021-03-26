@@ -400,6 +400,17 @@ describe(
 
       await ibrahim.render('[test int="1" bool="true" float="47.21" str="selda bagcan"]')
     })
+
+    // eslint-disable-next-line
+    test('empty shortcode list rendering', async () => {
+      const ibrahim = new Muteferrika()
+
+      const response =
+        await ibrahim.render('[parent][child][/parent]')
+
+      // eslint-disable-next-line
+      expect(response).toBe('[parent][child][/parent]')
+    })
   }
 )
 
