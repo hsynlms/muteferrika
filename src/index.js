@@ -12,6 +12,16 @@ const {
  */
 function Muteferrika () {
   this._shortcodes = []
+  this._onTagRender =
+    function (fullMatch, finalOutput, shortcodeOutput) {
+      return finalOutput.replace(
+        new RegExp(
+          this.escapeRegExp(fullMatch),
+          'gmi'
+        ),
+        shortcodeOutput
+      )
+    }
 }
 
 // #region Private Method(s) of Muteferrika
@@ -90,11 +100,10 @@ function _prepFinalOutput (fullMatch, shortcodeOutput, finalOutput) {
   // validations
   if (shortcodeOutput && typeof shortcodeOutput === 'string') {
     // replace the shortcode full match with the output from the original text
-    return finalOutput.replace(
-      new RegExp(
-        helpers.escapeRegExp(fullMatch),
-        'gmi'
-      ),
+    return this._onTagRender.call(
+      { escapeRegExp },
+      fullMatch,
+      finalOutput,
       shortcodeOutput
     )
   }
@@ -426,6 +435,37 @@ Muteferrika.prototype.renderSync =
 
     // return the output
     return output
+  }
+
+/**
+ * Sets the handler for the given event
+ * @param {string} name Name of the event
+ * @param {function} handler Event handler function
+ */
+Muteferrika.prototype.on =
+  function (name, handler) {
+    // validation
+    if (typeof name !== 'string') {
+      throw new TypeError(`"name" is expected to be a string but got: ${typeof name}`)
+    }
+
+    // remove space chars from start and end of the shortcode name
+    const _name = name.trim()
+
+    // validation
+    if (!_name) throw new TypeError('"name" cannot be empty')
+    if (typeof handler !== 'function') {
+      throw new TypeError(`"handler" is expected to be a function but got: ${typeof handler}`)
+    }
+
+    switch (_name) {
+      case 'tagRender':
+        this._onTagRender = handler
+
+        break
+      default:
+        break
+    }
   }
 
 module.exports = Muteferrika

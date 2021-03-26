@@ -140,6 +140,20 @@ Synchronously renders the shortcodes in the given content through shortcode (syn
 
 `content` must be a string.
 
+### `Muteferrika.on(name, handler)`
+
+Sets the handler for the given event.
+
+`name` is the name of the event. See [events section](#events) for more information.
+
+`callback` the event handler function which will be called when the event is fired. See [events section](#events) for more information.
+
+## Events
+
+| Name              | Arguments                                   | Description                                                     |
+| ---               | ---                                         | ---                                                             |
+| tagRender         | `fullMatch` `shortcodeOutput` `finalOutput` | This event will be fired before the shortcode tag is being replaced by the rendered output |
+
 ## Contribution
 Contributions and pull requests are kindly welcomed!
 

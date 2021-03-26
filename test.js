@@ -411,6 +411,26 @@ describe(
       // eslint-disable-next-line
       expect(response).toBe('[parent][child][/parent]')
     })
+
+    // eslint-disable-next-line
+    test('custom `tagRender` event test', async () => {
+      const ibrahim = new Muteferrika()
+
+      ibrahim.add('parent', customCb)
+
+      ibrahim.on(
+        'tagRender',
+        function () {
+          return 'tagRender event is fired.'
+        }
+      )
+
+      const response =
+        await ibrahim.render('[parent][child][/parent]')
+
+      // eslint-disable-next-line
+      expect(response).toBe('tagRender event is fired.')
+    })
   }
 )
 
@@ -698,6 +718,76 @@ describe(
       // eslint-disable-next-line
       expect(() => {
         ibrahim.renderSync(noop)
+      }).toThrow()
+    })
+
+    // eslint-disable-next-line
+    test('on() - "name" validation', () => {
+      const ibrahim = new Muteferrika()
+
+      // eslint-disable-next-line
+      expect(() => {
+        ibrahim.on({}, customCb)
+      }).toThrow()
+
+      // eslint-disable-next-line
+      expect(() => {
+        ibrahim.on('', customCb)
+      }).toThrow()
+
+      // eslint-disable-next-line
+      expect(() => {
+        ibrahim.on([], customCb)
+      }).toThrow()
+
+      // eslint-disable-next-line
+      expect(() => {
+        ibrahim.on(1, customCb)
+      }).toThrow()
+
+      // eslint-disable-next-line
+      expect(() => {
+        ibrahim.on(false, customCb)
+      }).toThrow()
+
+      // eslint-disable-next-line
+      expect(() => {
+        ibrahim.on(' ', customCb)
+      }).toThrow()
+
+      // eslint-disable-next-line
+      expect(() => {
+        ibrahim.on(noop, customCb)
+      }).toThrow()
+    })
+
+    // eslint-disable-next-line
+    test('on() - "handler" validation', () => {
+      const ibrahim = new Muteferrika()
+
+      // eslint-disable-next-line
+      expect(() => {
+        ibrahim.on('test', {})
+      }).toThrow()
+
+      // eslint-disable-next-line
+      expect(() => {
+        ibrahim.on('test', '')
+      }).toThrow()
+
+      // eslint-disable-next-line
+      expect(() => {
+        ibrahim.on('test', [])
+      }).toThrow()
+
+      // eslint-disable-next-line
+      expect(() => {
+        ibrahim.on('test', 1)
+      }).toThrow()
+
+      // eslint-disable-next-line
+      expect(() => {
+        ibrahim.on('test', false)
       }).toThrow()
     })
   }
