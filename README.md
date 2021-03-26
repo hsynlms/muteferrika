@@ -152,7 +152,7 @@ Sets the handler for the given event.
 
 | Name              | Arguments                                   | Description                                                     |
 | ---               | ---                                         | ---                                                             |
-| tagRender         | `fullMatch` `shortcodeOutput` `finalOutput` | This event will be fired before the shortcode tag is being replaced by the rendered output |
+| tagRender         | `fullMatch` `finalOutput` `shortcodeOutput` | This event will be fired before the shortcode tag is being replaced by the rendered output |
 
 ## Contribution
 Contributions and pull requests are kindly welcomed!
