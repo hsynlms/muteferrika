@@ -26,16 +26,18 @@ Wheel is not reinvented, instead [Wordpress](https://wordpress.org) shortcode an
 
 ```js
 // CommonJS syntax
-const ibrahim = require('muteferrika')
+const Muteferrika = require('muteferrika')
 
 // ES6 syntax
-import ibrahim from 'muteferrika'
+import Muteferrika from 'muteferrika'
 ```
 
 ## Examples
 
 ```js
-const ibrahim = require('muteferrika')
+const Muteferrika = require('muteferrika')
+
+const ibrahim = new Muteferrika()
 
 // define a shortcode
 ibrahim.add('entry_image', async (attrs, data) => {
@@ -56,7 +58,9 @@ lorem ipsum <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Ibrahi
 Nested shortcode example:
 
 ```js
-const ibrahim = require('muteferrika')
+const Muteferrika = require('muteferrika')
+
+const ibrahim = new Muteferrika()
 
 ibrahim.add('parent', (attrs, data) => {
   return data
