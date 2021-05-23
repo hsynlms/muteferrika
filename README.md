@@ -1,7 +1,8 @@
 # Muteferrika
 > A simple and lightweight shortcode rendering engine.
 
-[![NPM](https://nodei.co/npm/muteferrika.png)](https://nodei.co/npm/muteferrika/)
+[![Downloads](https://img.shields.io/npm/dm/muteferrika.svg)](https://npmjs.com/muteferrika)
+[![install size](https://packagephobia.com/badge?p=muteferrika)](https://packagephobia.com/result?p=muteferrika)
 
 `Muteferrika` is a rendering engine with no dependency that gives you full control of how your shortcodes are getting rendered. Create your shortcodes, let Muteferrika know them, and get the rendered output. It's that much simple. It also supports nested shortcodes, yeey!
 
@@ -19,8 +20,10 @@ Wheel is not reinvented, instead [Wordpress](https://wordpress.org) shortcode an
 - Comprehensive unit tests
 - No dependency!
 
-## Installation
-`npm install muteferrika`
+## Install
+```
+$ npm install muteferrika
+```
 
 ## Usage
 
@@ -157,9 +160,3 @@ Sets the handler for the given event.
 | Name              | Arguments                                   | Description                                                     |
 | ---               | ---                                         | ---                                                             |
 | tagRender         | `fullMatch` `finalOutput` `shortcodeOutput` | This event will be fired before the shortcode tag is being replaced by the rendered output |
-
-## Contribution
-Contributions and pull requests are kindly welcomed!
-
-## License
-This project is licensed under the terms of the [MIT license](https://github.com/hsynlms/muteferrika/blob/master/LICENSE).
