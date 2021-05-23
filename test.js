@@ -1,9 +1,7 @@
 'use strict'
 
-// get required node modules
 const Muteferrika = require('./src/index')
 
-// helper functions
 const noop = () => {}
 
 const customCb = () => {

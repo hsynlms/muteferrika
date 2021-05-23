@@ -7,14 +7,13 @@
  */
 exports.typeCast =
   value => {
-    // return not supported type values
+    // not supported type values
     if (
       typeof value !== 'number' &&
       typeof value !== 'boolean' &&
       typeof value !== 'string'
     ) return value
 
-    // validation
     if (typeof value === 'string' && !value.trim()) {
       return value
     }

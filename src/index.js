@@ -55,7 +55,6 @@ function _tagParser (tag, output) {
     )
   }
 
-  // get the shortcode
   const shortcode =
     this._shortcodes.filter(shortcode => shortcode.name === tag[2].trim())[0] || {}
 
@@ -75,7 +74,6 @@ function _tagParser (tag, output) {
 }
 
 function _fetchTagAttributes (rawAttributes) {
-  // get shortcode tag parser regexp
   const tagAttrRegexp = getShortCodeAttrRegexp('gmi')
 
   // reveal the tag attributes
@@ -97,9 +95,7 @@ function _fetchTagAttributes (rawAttributes) {
 }
 
 function _prepFinalOutput (fullMatch, shortcodeOutput, finalOutput) {
-  // validations
   if (shortcodeOutput && typeof shortcodeOutput === 'string') {
-    // replace the shortcode full match with the output from the original text
     return this._onTagRender.call(
       { escapeRegExp },
       fullMatch,
@@ -120,21 +116,17 @@ function _prepFinalOutput (fullMatch, shortcodeOutput, finalOutput) {
  */
 Muteferrika.prototype.add =
   function (name, callback) {
-    // validation
     if (typeof name !== 'string') {
       throw new TypeError(`"name" is expected to be a string but got: ${typeof name}`)
     }
 
-    // remove space from start and end of the shortcode name
     const _name = name.trim()
 
-    // validations
     if (!_name) throw new TypeError('"name" cannot be empty')
     if (typeof callback !== 'function') {
       throw new TypeError(`"callback" is expected to be a function but got: ${typeof callback}`)
     }
 
-    // check the existence of the given shortcode
     if (
       this._shortcodes
         .filter(x => x.name === _name)
@@ -143,7 +135,6 @@ Muteferrika.prototype.add =
       throw new Error(`A same name shortcode does already exist: ${_name}`)
     }
 
-    // add shortcode to the list
     this._shortcodes =
       this._shortcodes.concat({
         name: _name,
@@ -157,14 +148,11 @@ Muteferrika.prototype.add =
  */
 Muteferrika.prototype.addRange =
   function (shortcodes) {
-    // validation
     if (!Array.isArray(shortcodes)) {
       throw new TypeError(`"shortcodes" is expected to be an array but got: ${typeof name}`)
     }
 
-    // loop shortcodes
     shortcodes.forEach(shortcode => {
-      // validate shortcode fields
       if (!('name' in shortcode) ||
           typeof shortcode.name !== 'string' ||
           !shortcode.name.trim()) {
@@ -176,10 +164,8 @@ Muteferrika.prototype.addRange =
         throw new TypeError('"callback" may not be provided or may not be a function')
       }
 
-      // remove space from start and end of the shortcode name
       const _name = shortcode.name.trim()
 
-      // check the existence of the given shortcode
       if (
         this._shortcodes
           .filter(x => x.name === _name)
@@ -188,7 +174,6 @@ Muteferrika.prototype.addRange =
         throw new Error(`A same name shortcode does already exist: ${_name}`)
       }
 
-      // add shortcode to the list
       this._shortcodes =
         this._shortcodes.concat({
           name: _name,
@@ -203,18 +188,14 @@ Muteferrika.prototype.addRange =
  */
 Muteferrika.prototype.remove =
   function (name) {
-    // validation
     if (typeof name !== 'string') {
       throw new TypeError(`"name" is expected to be a string but got: ${typeof name}`)
     }
 
-    // remove space from start and end of the shortcode name
     const _name = name.trim()
 
-    // validation
     if (!_name) throw new TypeError('"name" cannot be empty')
 
-    // remove the shortcode from list
     this._shortcodes =
       this._shortcodes.filter(x => x.name !== _name)
   }
@@ -224,7 +205,6 @@ Muteferrika.prototype.remove =
  */
 Muteferrika.prototype.clear =
   function () {
-    // clear the shortcode list
     this._shortcodes = []
   }
 
@@ -236,21 +216,17 @@ Muteferrika.prototype.clear =
  */
 Muteferrika.prototype.override =
   function (name, callback) {
-    // validation
     if (typeof name !== 'string') {
       throw new TypeError(`"name" is expected to be a string but got: ${typeof name}`)
     }
 
-    // remove space chars from start and end of the shortcode name
     const _name = name.trim()
 
-    // validation
     if (!_name) throw new TypeError('"name" cannot be empty')
     if (typeof callback !== 'function') {
       throw new TypeError(`"callback" is expected to be a function but got: ${typeof callback}`)
     }
 
-    // get the shortcode
     const shortcode =
       this._shortcodes.filter(x => x.name === _name)
 
@@ -270,7 +246,6 @@ Muteferrika.prototype.shortcodes =
   function () {
     let mutatedList = []
 
-    // loop all shortcodes
     this._shortcodes.forEach(x => {
       mutatedList =
         mutatedList.concat(
@@ -278,7 +253,6 @@ Muteferrika.prototype.shortcodes =
         )
     })
 
-    // return the mutated list
     return mutatedList
   }
 
@@ -290,7 +264,6 @@ Muteferrika.prototype.shortcodes =
  */
 Muteferrika.prototype.render =
   async function (content) {
-    // validation
     if (typeof content !== 'string') {
       throw new TypeError(`"context" is expected to be a string but got: ${typeof content}`)
     }
@@ -298,16 +271,12 @@ Muteferrika.prototype.render =
 
     let output = content
 
-    // fetch matched tags
     const {
       tagMatches,
       tagRegexp
     } = _fetchTags.call(this, output)
 
-    // invoke all found shortcode callback functions
-    // and render them
     for (let i = 0; i < tagMatches.length; i++) {
-      // parse the tag
       const parsedTag =
         _tagParser.call(this, tagMatches[i], output)
 
@@ -325,7 +294,6 @@ Muteferrika.prototype.render =
 
       let data = rawData
 
-      // validation
       if (data) {
         // render nested tags
         const nestedTagMatches =
@@ -340,13 +308,11 @@ Muteferrika.prototype.render =
       const { attributes } =
         _fetchTagAttributes.call(this, rawAttributes)
 
-      // invoke the shortcode callback and get the result
       const scOutput =
         typeof shortcode.callback === 'function'
           ? await shortcode.callback(attributes, data)
           : data
 
-      // process final output
       output =
         _prepFinalOutput.call(
           this,
@@ -356,7 +322,6 @@ Muteferrika.prototype.render =
         )
     }
 
-    // return the output
     return output
   }
 
@@ -367,7 +332,6 @@ Muteferrika.prototype.render =
  */
 Muteferrika.prototype.renderSync =
   function (content) {
-    // validation
     if (typeof content !== 'string') {
       throw new TypeError(`"context" is expected to be a string but got: ${typeof content}`)
     }
@@ -375,16 +339,12 @@ Muteferrika.prototype.renderSync =
 
     let output = content
 
-    // fetch matched tags
     const {
       tagMatches,
       tagRegexp
     } = _fetchTags.call(this, output)
 
-    // invoke all found shortcode callback functions
-    // and render them
     for (let i = 0; i < tagMatches.length; i++) {
-      // parse the tag
       const parsedTag =
         _tagParser.call(this, tagMatches[i], output)
 
@@ -402,7 +362,6 @@ Muteferrika.prototype.renderSync =
 
       let data = rawData
 
-      // validation
       if (data) {
         // render nested tags
         const nestedTagMatches =
@@ -413,17 +372,14 @@ Muteferrika.prototype.renderSync =
         }
       }
 
-      // fetch the tag attributes
       const { attributes } =
         _fetchTagAttributes.call(this, rawAttributes)
 
-      // invoke the shortcode callback and get the result
       const scOutput =
         typeof shortcode.callback === 'function'
           ? shortcode.callback(attributes, data)
           : data
 
-      // process final output
       output =
         _prepFinalOutput.call(
           this,
@@ -433,7 +389,6 @@ Muteferrika.prototype.renderSync =
         )
     }
 
-    // return the output
     return output
   }
 
@@ -444,15 +399,12 @@ Muteferrika.prototype.renderSync =
  */
 Muteferrika.prototype.on =
   function (name, handler) {
-    // validation
     if (typeof name !== 'string') {
       throw new TypeError(`"name" is expected to be a string but got: ${typeof name}`)
     }
 
-    // remove space chars from start and end of the shortcode name
     const _name = name.trim()
 
-    // validation
     if (!_name) throw new TypeError('"name" cannot be empty')
     if (typeof handler !== 'function') {
       throw new TypeError(`"handler" is expected to be a function but got: ${typeof handler}`)
